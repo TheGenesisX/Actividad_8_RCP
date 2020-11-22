@@ -5,6 +5,13 @@ import (
 	"net/rpc"
 )
 
+// Informacion ...
+type Informacion struct {
+	NombreAlumno string
+	Materia      string
+	Calificacion float64
+}
+
 func client() {
 	newClient, err := rpc.Dial("tcp", "127.0.0.1:9999")
 	if err != nil {
@@ -24,49 +31,47 @@ func client() {
 
 		switch op {
 		case 1:
-			var nombreAlumno, materia, reply string
-			var calificacion float64
+			var alumno Informacion
+			var reply string
 
 			fmt.Print("Nombre del alumno: ")
-			fmt.Scanln(&nombreAlumno)
+			fmt.Scanln(&alumno.NombreAlumno)
 
 			fmt.Println("Materia: ")
-			fmt.Scanln(&materia)
+			fmt.Scanln(&alumno.Materia)
 
 			fmt.Println("Calificacion: ")
-			fmt.Scanln(&calificacion)
+			fmt.Scanln(&alumno.Calificacion)
 
-			err = newClient.Call("Server.AgregarCalificacion", nombreAlumno, materia, calificacion, &reply)
+			err = newClient.Call("Server.AgregarCalificacion", alumno, &reply)
 			if err != nil {
 				fmt.Println(err)
 			} else {
 				fmt.Println(reply)
 			}
 
-		// case 2:
-		// 	var nombreAlumno string
-		// 	var promedio float64
+		case 2:
+			var nombreAlumno, reply float64
 
-		// 	fmt.Print("Nombre del alumno: ")
-		// 	fmt.Scanln(&nombreAlumno)
+			fmt.Print("Nombre del alumno: ")
+			fmt.Scanln(&nombreAlumno)
 
-		// 	// err = newClient.Call("Server.ObtenerPromedioIndividual",
-		// 	//						nombreAlumno, &promedio)
-		// 	if err != nil {
-		// 		fmt.Println(err)
-		// 	} else {
-		// 		// fmt.Println("Promedio:", promedio)
-		// 	}
+			err = newClient.Call("Server.ObtenerPromedioIndividual", nombreAlumno, &reply)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				fmt.Println("Promedio:", reply)
+			}
 
-		// case 3:
-		// 	var promedio float64
+		case 3:
+			var promedio float64
 
-		// 	// err = newClient.Call("Server.ObtenerPromedioGrupal", &promedio)
-		// 	if err != nil {
-		// 		fmt.Println(err)
-		// 	} else {
-		// 		// fmt.Println("Promedio:", promedio)
-		// 	}
+			// err = newClient.Call("Server.ObtenerPromedioGrupal", &promedio)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				// fmt.Println("Promedio:", promedio)
+			}
 
 		// case 4:
 		// 	var materia string
