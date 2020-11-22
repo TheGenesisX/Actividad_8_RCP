@@ -27,6 +27,7 @@ func client() {
 		fmt.Println("3) Mostrar el promedio general.")
 		fmt.Println("4) Mostrar el promedio de una materia.")
 		fmt.Println("0) Salir.")
+		fmt.Print("Opcion: ")
 		fmt.Scanln(&op)
 
 		switch op {
@@ -37,10 +38,10 @@ func client() {
 			fmt.Print("Nombre del alumno: ")
 			fmt.Scanln(&alumno.NombreAlumno)
 
-			fmt.Println("Materia: ")
+			fmt.Print("Materia: ")
 			fmt.Scanln(&alumno.Materia)
 
-			fmt.Println("Calificacion: ")
+			fmt.Print("Calificacion: ")
 			fmt.Scanln(&alumno.Calificacion)
 
 			err = newClient.Call("Server.AgregarCalificacion", alumno, &reply)
@@ -51,7 +52,8 @@ func client() {
 			}
 
 		case 2:
-			var nombreAlumno, reply float64
+			var nombreAlumno string
+			var reply float64
 
 			fmt.Print("Nombre del alumno: ")
 			fmt.Scanln(&nombreAlumno)
@@ -78,7 +80,7 @@ func client() {
 			var materia string
 			var reply float64
 
-			fmt.Println("Materia: ")
+			fmt.Print("Materia: ")
 			fmt.Scanln(&materia)
 
 			err = newClient.Call("Server.ObtenerPromedioMateria", materia, &reply)

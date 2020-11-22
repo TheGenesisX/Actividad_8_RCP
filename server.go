@@ -22,28 +22,38 @@ type Server struct{}
 
 // AgregarCalificacion ...
 func (server *Server) AgregarCalificacion(alumno Informacion, reply *string) error {
-	calificacionActual := alumnos[alumno.NombreAlumno][alumno.Materia]
+	if _, alumnoExists := alumnos[alumno.NombreAlumno]; alumnoExists {
+		if _, materiaExists := alumnos[alumno.NombreAlumno][alumno.Materia]; materiaExists {
 
-	if calificacionActual != 0 {
-		return errors.New("Ya existe una calificacion registrada. No es posible modificarla")
+			calificacionActual := alumnos[alumno.NombreAlumno][alumno.Materia]
+
+			if calificacionActual != 0 {
+				return errors.New("Ya existe una calificacion registrada. No es posible modificarla")
+			}
+			alumnos[alumno.NombreAlumno][alumno.Materia] = alumno.Calificacion
+			materias[alumno.Materia][alumno.NombreAlumno] = alumno.Calificacion
+			*reply = "Calificacion registrada con exito."
+			return nil
+		}
+		return errors.New("Materia no encontrada")
 	}
-	alumnos[alumno.NombreAlumno][alumno.Materia] = alumno.Calificacion
-	materias[alumno.Materia][alumno.NombreAlumno] = alumno.Calificacion
-	*reply = "Calificacion registrada con exito."
-	return nil
+	return errors.New("Alumno no encontrado")
 }
 
 // ObtenerPromedioIndividual ...
 func (server *Server) ObtenerPromedioIndividual(NombreAlumno string, reply *float64) error {
 	promedio, contadorMaterias := 0.0, 0.0
 
-	for _, value := range alumnos[NombreAlumno] {
-		promedio += value
-		contadorMaterias++
+	if _, alumnoExists := alumnos[NombreAlumno]; alumnoExists {
+		for _, value := range alumnos[NombreAlumno] {
+			promedio += value
+			contadorMaterias++
+		}
+		promedio /= contadorMaterias
+		*reply = promedio
+		return nil
 	}
-	promedio /= contadorMaterias
-	*reply = promedio
-	return nil
+	return errors.New("Alumno no encontrado")
 }
 
 // ObtenerPromedioGrupal ... skip int no se usa. Explicacion en client.go
@@ -79,13 +89,16 @@ func (server *Server) ObtenerPromedioGrupal(skip int, reply *float64) error {
 func (server *Server) ObtenerPromedioMateria(materia string, reply *float64) error {
 	promedio, contadorAlumnos := 0.0, 0.0
 
-	for _, value := range materias[materia] {
-		promedio += value
-		contadorAlumnos++
+	if _, materiaExists := materias[materia]; materiaExists {
+		for _, value := range materias[materia] {
+			promedio += value
+			contadorAlumnos++
+		}
+		promedio /= contadorAlumnos
+		*reply = promedio
+		return nil
 	}
-	promedio /= contadorAlumnos
-	*reply = promedio
-	return nil
+	return errors.New("Materia no encontrada")
 }
 
 func server() {
