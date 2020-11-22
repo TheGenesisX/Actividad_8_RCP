@@ -124,36 +124,36 @@ func main() {
 
 	// Inicializacion de materias.
 	materias["Programacion"] = map[string]float64{
-		"Alejandro": 100,
-		"Rafael":    100,
-		"Efren":     100,
+		"Alejandro": 0,
+		"Rafael":    0,
+		"Efren":     0,
 	}
 	materias["Algoritmia"] = map[string]float64{
-		"Alejandro": 100,
-		"Rafael":    100,
-		"Efren":     100,
+		"Alejandro": 0,
+		"Rafael":    0,
+		"Efren":     0,
 	}
 	materias["Concurrentes"] = map[string]float64{
-		"Alejandro": 100,
-		"Rafael":    100,
-		"Efren":     100,
+		"Alejandro": 0,
+		"Rafael":    0,
+		"Efren":     0,
 	}
 
 	// Inicializacion de alumnos.
 	alumnos["Alejandro"] = map[string]float64{
-		"Programacion": 100,
-		"Algoritmia":   100,
-		"Concurrentes": 100,
+		"Programacion": 0,
+		"Algoritmia":   0,
+		"Concurrentes": 0,
 	}
 	alumnos["Rafael"] = map[string]float64{
-		"Programacion": 100,
-		"Algoritmia":   100,
-		"Concurrentes": 100,
+		"Programacion": 0,
+		"Algoritmia":   0,
+		"Concurrentes": 0,
 	}
 	alumnos["Efren"] = map[string]float64{
-		"Programacion": 100,
-		"Algoritmia":   100,
-		"Concurrentes": 100,
+		"Programacion": 0,
+		"Algoritmia":   0,
+		"Concurrentes": 0,
 	}
 
 	go server()
