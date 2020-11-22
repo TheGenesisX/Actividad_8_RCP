@@ -64,28 +64,29 @@ func client() {
 			}
 
 		case 3:
-			var promedio float64
+			var reply float64
 
-			// err = newClient.Call("Server.ObtenerPromedioGrupal", &promedio)
+			err = newClient.Call("Server.ObtenerPromedioGrupal", 0, &reply)
+			// Como no necesito un primer parametro, lo "evito" mandando un cero...que no se usa.
 			if err != nil {
 				fmt.Println(err)
 			} else {
-				// fmt.Println("Promedio:", promedio)
+				fmt.Println("Promedio general:", reply)
 			}
 
-		// case 4:
-		// 	var materia string
-		// 	var promedio float64
+		case 4:
+			var materia string
+			var reply float64
 
-		// 	fmt.Println("Materia: ")
-		// 	fmt.Scanln(&materia)
+			fmt.Println("Materia: ")
+			fmt.Scanln(&materia)
 
-		// 	// err = newClient.Call("Server.ObtenerPromedioMateria", &promedio)
-		// 	if err != nil {
-		// 		fmt.Println(err)
-		// 	} else {
-		// 		// fmt.Println("Promedio:", promedio)
-		// 	}
+			err = newClient.Call("Server.ObtenerPromedioMateria", materia, &reply)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				fmt.Println("Promedio:", reply)
+			}
 
 		case 0:
 			fmt.Println("Saliendo del cliente.")

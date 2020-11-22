@@ -35,27 +35,22 @@ func (server *Server) AgregarCalificacion(alumno Informacion, reply *string) err
 
 // ObtenerPromedioIndividual ...
 func (server *Server) ObtenerPromedioIndividual(NombreAlumno string, reply *float64) error {
-	promedio := 0.0
-	contador := 0.0
+	promedio, contadorMaterias := 0.0, 0.0
 
 	for _, value := range alumnos[NombreAlumno] {
 		promedio += value
-		contador++
+		contadorMaterias++
 	}
-
-	if contador > 0 {
-		promedio /= contador
-		*reply = promedio
-		return nil
-	}
-	return errors.New("No es posible obtener el promedio. Division entre cero")
+	promedio /= contadorMaterias
+	*reply = promedio
+	return nil
 }
 
-// ObtenerPromedioGrupal ...
-func (server *Server) ObtenerPromedioGrupal(reply *float64) error {
+// ObtenerPromedioGrupal ... skip int no se usa. Explicacion en client.go
+func (server *Server) ObtenerPromedioGrupal(skip int, reply *float64) error {
 	promedios := make([]float64, len(alumnos))
 	promedioGeneral := 0.0
-	contador := 0
+	pos, contadorMaterias := 0, 0.0
 
 	for i := 0; i < len(alumnos); i++ {
 		promedios[i] = 0
@@ -63,22 +58,33 @@ func (server *Server) ObtenerPromedioGrupal(reply *float64) error {
 
 	for nombre := range alumnos {
 		for _, calificacion := range alumnos[nombre] {
-			promedios[contador] += calificacion
+			promedios[pos] += calificacion
+			contadorMaterias++
 			// Obtenemos la suma de las calificaciones de cada alumno por individual.
 		}
-		if promedios[contador] == 0 {
-			return errors.New("No es posible obtener el promedio. Division entre cero")
-		} // Si no sumamos nada, no podemos calcular promedio por problema de division entre cero.
-		promedios[contador] /= float64(len(materias))
-		contador++
+		promedios[pos] /= contadorMaterias
+		pos++
+		contadorMaterias = 0.0
 	}
-	contador = 0
 
 	for x := range promedios {
 		promedioGeneral += promedios[x]
 	}
-	promedioGeneral /= float64(len(materias))
+	promedioGeneral /= float64(len(alumnos))
 	*reply = promedioGeneral
+	return nil
+}
+
+// ObtenerPromedioMateria ...
+func (server *Server) ObtenerPromedioMateria(materia string, reply *float64) error {
+	promedio, contadorAlumnos := 0.0, 0.0
+
+	for _, value := range materias[materia] {
+		promedio += value
+		contadorAlumnos++
+	}
+	promedio /= contadorAlumnos
+	*reply = promedio
 	return nil
 }
 
@@ -105,36 +111,36 @@ func main() {
 
 	// Inicializacion de materias.
 	materias["Programacion"] = map[string]float64{
-		"Alejandro": 0,
-		"Rafael":    0,
-		"Efren":     0,
+		"Alejandro": 100,
+		"Rafael":    100,
+		"Efren":     100,
 	}
 	materias["Algoritmia"] = map[string]float64{
-		"Alejandro": 0,
-		"Rafael":    0,
-		"Efren":     0,
+		"Alejandro": 100,
+		"Rafael":    100,
+		"Efren":     100,
 	}
 	materias["Concurrentes"] = map[string]float64{
-		"Alejandro": 0,
-		"Rafael":    0,
-		"Efren":     0,
+		"Alejandro": 100,
+		"Rafael":    100,
+		"Efren":     100,
 	}
 
 	// Inicializacion de alumnos.
 	alumnos["Alejandro"] = map[string]float64{
 		"Programacion": 100,
-		"Algoritmia":   50,
-		"Concurrentes": 90,
+		"Algoritmia":   100,
+		"Concurrentes": 100,
 	}
 	alumnos["Rafael"] = map[string]float64{
-		"Programacion": 0,
-		"Algoritmia":   0,
-		"Concurrentes": 0,
+		"Programacion": 100,
+		"Algoritmia":   100,
+		"Concurrentes": 100,
 	}
 	alumnos["Efren"] = map[string]float64{
-		"Programacion": 0,
-		"Algoritmia":   0,
-		"Concurrentes": 0,
+		"Programacion": 100,
+		"Algoritmia":   100,
+		"Concurrentes": 100,
 	}
 
 	go server()
